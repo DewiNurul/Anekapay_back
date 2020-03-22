@@ -43,6 +43,13 @@ Route::get('tagihan', 'TagihanController@getAll');
 Route::get('tagihan/{id}', 'TagihanController@show');
 Route::delete('tagihan/{id}', 'TagihanController@delete');
 
+//pembayaran
+Route::post('pembayaran', 'PembayaranController@store');
+Route::put('pembayaran/{id}', 'PembayaranController@ubah');
+Route::get('pembayaran', 'PembayaranController@getAll');
+Route::get('pembayaran/{id}', 'PembayaranController@show');
+Route::delete('pembayaran/{id}', 'PembayaranController@delete');
+
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

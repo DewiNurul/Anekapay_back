@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Tarif;
 use App\Pelanggan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -12,6 +13,43 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 class PelangganController extends Controller
 {
 
+    public function index()
+    {
+    	try{
+	        $data["count"] = Pelanggan::count();
+	        $pelanggan = array();
+	        $dataPelanggan = DB::table('pelanggan')->join('tarif','tarif.id','=','pelanggan.id_tarif')
+                                               ->select('pelanggan.id', 'tarif.daya','tarif.tarifperkwh','pelanggan.id_tarif')
+	                                           ->get();
+
+	        foreach ($dataPelanggan as $p) {
+	            $item = [
+	              "id"          		=> $p->id,
+                  "id_tarif"            => $p->id_tarif,
+	              "daya"  		        => $p->daya,
+	              "tarifperkwh"  		=> $p->tarifperkwh,
+                  "username"            => $p->username,
+	              "password"            => $p->password,
+                  "nomor_kwh"  		    => $p->nomor_kwh,
+                  "nomor_telp"          => $p->nomor_telp,
+	              "nama_pelanggan"      => $p->nama_pelanggan,
+                  "alamat"              => $p->alamat,
+	               			   
+	            ];
+
+	            array_push($poin, $item);
+	        }
+	        $data["poin"] = $poin;
+	        $data["status"] = 1;
+	        return response($data);
+
+	    } catch(\Exception $e){
+			return response()->json([
+			  'status' => '0',
+			  'message' => $e->getMessage()
+			]);
+      	}
+    }
     
     public function getAll($limit = 10, $offset = 0){
         $data["count"] = Pelanggan::count();
